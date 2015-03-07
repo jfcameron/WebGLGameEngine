@@ -1,0 +1,65 @@
+----------------
+Short term
+---------------
+Add parent translation, rotation, scaling to model matrix retrieval before drawing.
+Add game selection,
+Separate game includes from engine includes & automate game include loading
+
+-----------
+Long term
+---------
+Camera controls
+Make a math library
+Incorporate a physics engine
+Add normal to vertex attributes
+Add additional sets of uv attributes, incase custom vertex data is required.
+
+Fix ECM linking: move ECM includes to iframe, load iframe from main.html
+
+move all include groupings into appropriately named iframe includes
+
+Default uniforms like _Time, _MVP, _Model, _VP
+
+Refactor JS code into proper objects.
+    Engine.js
+    Graphics.js
+    GraphicsLib.js
+    Mathf.js
+
+Create VBOs for basic shapes: quad, cube, sphere, pyramid, etc.
+
+Create a mesh object: 
+    has a draw function to set up opengl blend states, draw mode etc. 
+    Has a reference to a vbo,
+    Has a reference to the shader to use (Separating shader from draw funct will allow shader changes at runtime).
+    Has a reference to the texture to use.
+    How should it handle uniforms?
+
+Look into 2d and 3d physics solutions.
+    Does WebGL's current standard support compute shaders?
+    Are there JS physics libraries? Are they used in any commercial projects?
+
+---------
+DONE
+---------
+Decoupled demo scene from Game.js.
+Wrote "opaque" shader
+hardcoded 1 camera translation
+hardcoded 1 camera perspective
+viewport view
+model scale
+model rotation
+model translation
+VBO for cube
+programmable draw call for gameobjects
+shaderprogram collection
+texture collection
+lambda find for arrays
+Vertex data for Tri
+Vertex data for Quad
+Library definitions for x,y,z rotations
+Fix GLSL function library not loading issue
+Add model matrix
+Add orthographic projection matrix
+Render textured quad
+Render NVPC triangle
