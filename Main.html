@@ -21,6 +21,7 @@
     <!--*************-->
     <!-- JS includes -->
     <!--*************-->
+    <!--Engine-->
     <script type="text/javascript" src="JS/FunctionExtensions.js"></script>
     <script type="text/javascript" src="JS/Input.js"></script>
     <script type="text/javascript" src="JS/Time.js"></script>
@@ -30,14 +31,13 @@
     <!--src="JS/Physics/Physics.js"-->
     <!--src="JS/Sound/Sound.js"-->
     <script type="text/javascript" src="JS/Application.js"></script>
-    
+    <script type="text/javascript" src="JS/GameBase.js"></script>
     <script type="text/javascript" src="JS/ECS/Component.js" ></script>
     <script type="text/javascript" src="JS/ECS/Mesh.js"      ></script>
     <script type="text/javascript" src="JS/ECS/Transform.js" ></script>
     <script type="text/javascript" src="JS/ECS/GameObject.js"></script>
-    
-    <script type="text/javascript" src="JS/GameBase.js"       ></script>
-    <script type="text/javascript" src="JS/Games/Demo/Game.js"></script> <!--Replace with game selector-->
+    <!--Game-->
+    <script type="text/javascript" src="JS/Games/Demo/Game.js"></script>
     
     
     
@@ -47,7 +47,15 @@
     <title>WebGL Test</title>
     
     <body onload="Start();">
-        <canvas id="canvas" width="640" height="640"></canvas>
+        <canvas id="canvas" width="640" height="480"></canvas>
+        
+        <p id = "footer">
+            This project uses 
+            <a href ="https://www.khronos.org/webgl/wiki/Main_Page">WebGL</a>,
+            <a href ="http://glmatrix.net/">glMatrix-0.9.5</a>.<br>  
+            Source available <a href ="https://github.com/jfcameron/WebGLGameEngine/">here</a>.
+            
+        </p>
     
     </body>
     

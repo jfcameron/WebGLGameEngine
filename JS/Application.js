@@ -13,6 +13,7 @@ function Start()
 {
     //init TIME
     TIME = new Time();
+    TIME.start();
 
     //Init INPUT
     INPUT = new Input();
@@ -23,13 +24,10 @@ function Start()
     GRAPHICS.start();
 
     //Init GAME
-    GAME = new Game();
-    GAME.superStart();
-    GAME.start();
-    
-    //Setup main loop
-    setInterval(Update,16);
-    
+     GAME = new Game();
+     GAME.superStart();
+     GAME.start();
+     
 }
 
 //**********
@@ -39,8 +37,9 @@ function Update()
 {
     TIME.update();
     GRAPHICS.update();
-    GAME.update();
     
+    if (GAME != undefined)
+        GAME.update();
 
 }
 

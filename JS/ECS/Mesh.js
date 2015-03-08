@@ -51,8 +51,6 @@ function Mesh(ownerGameObject)
     {    
         if (this.draw != undefined)
             this.draw();
-        
-        //console.log("Mesh " + this.test());
     
     };
     

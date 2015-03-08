@@ -40,10 +40,23 @@ Array.prototype.find = function(aSearchFunction)
      
 }
 
+function Include(aSource)
+{    
+    var gameSource = null;
+    {   
+        //Load js
+        gameSource = document.createElement("script");
+        gameSource.setAttribute("type","text/javascript");
+        gameSource.setAttribute("src", aSource);
+        
+    }
+    
+    document.body.appendChild(gameSource);
+    
+}
 
+function EndIncludes()
+{
+    Start();
 
-
-
-
-
-
+}

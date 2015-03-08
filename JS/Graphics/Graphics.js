@@ -27,44 +27,42 @@ function Graphics()
     //*************
     // Data members
     //*************
-    //Graphics data
-    var canvas = null;
+    //Context data
+    var canvas              = null; //Reference to the html element
     var glContext           = null; //Reference to the gl context
-    var shaderPrograms       = []; //Reference to the shader program used to render triangle
+    
+    //User data
+    var clearColor          = [0.535,0.535,0.8,1.0];
+    var shaderPrograms      = []; //List of handles to shader programs
+    var textures            = []; //List of handles to textures
+    var VertexArrays        = []; //List of user defined vertex data
+    
+    //Special VBOs TODO: consider moving to vertexarrays
     var QuadVertexArray     = null; //Reference to the VBO containing Quad vertex data
     var TriVertexArray      = null; //Reference to the VBO containing Triangle vertex data
-    var CubeVertexArray     = null;
-    var textures            =  [];
+    var CubeVertexArray     = null;    
     
-    var image               = null;
-    var clearColor          = [0.535,0.535,0.8,1.0];
-    
+    //Camera data, should be refactored to allow for variable # of cameras
     var projectionMatrix    = null;
     var viewMatrix          = null;
-    var object2WorldMatrix  = null;
     
-    //
+    //**********
     // Accessors
-    //
+    //**********
     this.getContext            = function(){return glContext      ;};
-    
     this.getQuadVertexArray    = function(){return QuadVertexArray;};
     this.getTriVertexArray     = function(){return TriVertexArray;};
     this.getCubeVertexArray    = function(){return CubeVertexArray;};
-    
     this.getShaderPrograms     = function(){return shaderPrograms;};
     this.getShader             = function(y){return shaderPrograms.find(function(x){return x.getName() == y ? true : false;})};    
-    
     this.getProjectionMatrix   = function(){return projectionMatrix;};
     this.getViewMatrix         = function(){return viewMatrix;};
-    this.getObject2WorldMatrix = function(){return object2WorldMatrix;};
-    
     this.getTextures           = function(){return textures;};
     this.getTexture            = function(y){return textures.find(function(x){return x.getName() == y ? true : false;})};
     
-    //****************
-    // Program methods
-    //****************
+    //*********
+    // Methods
+    //*********
     //Initializers  
     this.initopenglContext = function ()
     {
@@ -88,12 +86,7 @@ function Graphics()
         mat4.identity(projectionMatrix);
        
         //mat4.ortho(0,10,0,10,-1,1,projectionMatrix);
-        mat4.perspective(45, 640 / 640 , 0.1, 100.0, projectionMatrix);
-        
-        //Smilely world matrix
-        object2WorldMatrix = mat4.create();
-        mat4.identity(object2WorldMatrix);
-        mat4.translate(object2WorldMatrix,[5,5,0]);
+        mat4.perspective(45, glContext.viewportWidth / glContext.viewportHeight , 0.1, 100.0, projectionMatrix);
         
     };
     
@@ -111,9 +104,9 @@ function Graphics()
         
         //Check for compile errors
         if( !glContext.getShaderParameter( vertexShader, glContext.COMPILE_STATUS) ) 
-            alert( glContext.getShaderInfoLog(vertexShader) );  
+            alert( glContext.getShaderInfoLog(vertexShader) );
         if( !glContext.getShaderParameter( fragShader, glContext.COMPILE_STATUS) )
-        alert( glContext.getShaderInfoLog(fragShader) );
+            alert( glContext.getShaderInfoLog(fragShader) );
         
         //Create the shader program & compile shaders into graphics programs     
         var shaderProgram = glContext.createProgram();
@@ -131,7 +124,7 @@ function Graphics()
     this.getShaderSource = function (aShaderProgram, id)
     {
         //get lib object
-        var shaderLibraryScript = document.getElementById("GLSLLibrary").contentWindow.document.getElementById("Testtest");
+        var shaderLibraryScript = document.getElementById("GLSLLibrary").contentWindow.document.getElementById("Global");
         
         // get shader program doc, sanity check
         var shaderProgramDocument = document.getElementById(aShaderProgram);
@@ -339,7 +332,7 @@ function Graphics()
 
     };
     
-    handleTextureLoaded = function (image, texture) 
+    handleTextureLoaded = function (image, texture)  //TODO: simplify. User should specify callback via parameter on loadText call
     {
     
         glContext.bindTexture(glContext.TEXTURE_2D, texture);

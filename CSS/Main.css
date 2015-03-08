@@ -16,7 +16,22 @@ iframe
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width:45%;    
+    width:50%;    
+    
+    /* Border style */
+    border-radius: 25px;
+    padding: 10px 10px; 
+    background: #000000;
+    
+}
+
+#footer
+{
+    /* Position and size */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width:52.5%;    
     
     /* Border style */
     border-radius: 25px;
@@ -27,7 +42,27 @@ iframe
 
 body
 {
-    background-image: url("../textures/awesome.png");
+    /* Background */
+    background-image: url("../textures/BG.png");
     background-color: #8888CC;
+    
+    /* Font */
+    font-family: 	helvetica, arial, sans-serif ;
+	font-size: 		15pt                         ;
+	color: 			grey                        ;
+    letter-spacing: 1px                          ;
+    text-align: center;
+
+}
+
+/*	Link styling	*/
+a:link {text-decoration:none;}    /* unvisited link */
+a:visited {text-decoration:none;} /* visited link */
+a:hover {text-decoration:underline;}   /* mouse over link */
+a:active {text-decoration:underline;}  /* selected link */
+
+a
+{
+    color: #7788FF;
 
 }
