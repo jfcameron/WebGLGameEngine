@@ -14,6 +14,8 @@ function Component()
 {
     var m_GameObject = null;
     
+    this.update = function(){};
+    
     this.test = function()
     {
         return "this is an inheritance test";

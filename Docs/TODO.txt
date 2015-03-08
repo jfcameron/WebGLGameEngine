@@ -1,13 +1,17 @@
 ----------------
 Short term
 ---------------
-Add parent translation, rotation, scaling to model matrix retrieval before drawing.
-Add game selection,
-Separate game includes from engine includes & automate game include loading
+Fix viewmatrix. Currently rotate and translate is backwards (translate -> rotate), meaning camera always orbits zero.
+    Create a camera object. Has pos, rotation and a getViewMatrix accessor, which creates a mat like this: new mat -> identity ->  rotate(rotation) - > translate(pos)
+
 
 -----------
 Long term
 ---------
+Add parent translation, rotation, scaling to model matrix retrieval before drawing.
+Add game selection,
+Separate game includes from engine includes & automate game include loading
+
 Camera controls
 Make a math library
 Incorporate a physics engine

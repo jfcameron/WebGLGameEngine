@@ -147,6 +147,35 @@ function Game()
             gameObject.getMesh().setVertexBuffer(GRAPHICS.getQuadVertexArray());
             gameObject.getMesh().setMainTexture(GRAPHICS.getTextures()[0]);
             gameObject.getTransform().setPosition([0,0,-10]);
+            
+            var aComponent = new Component();
+            aComponent.update = function()
+            {
+                if (INPUT.getKeys()[65])//left
+                    mat4.translate(GRAPHICS.getViewMatrix(),[0.05,0,0]);
+                
+                if (INPUT.getKeys()[68])//right
+                    mat4.translate(GRAPHICS.getViewMatrix(),[-0.05,0,0]);
+
+                if (INPUT.getKeys()[87])//up
+                    mat4.translate(GRAPHICS.getViewMatrix(),[0,0,0.05]);
+                    
+                if (INPUT.getKeys()[83])//down
+                    mat4.translate(GRAPHICS.getViewMatrix(),[0,0,-0.05]);
+                    
+                //Clockwise Y
+                if (INPUT.getKeys()[69])//down
+                    mat4.rotate(GRAPHICS.getViewMatrix(),0.025,[0,1,0]);
+                
+                //Counterclockwise Y
+                if (INPUT.getKeys()[81])//down
+                    mat4.rotate(GRAPHICS.getViewMatrix(),0.025,[0,-1,0]);
+            
+            }
+            
+            gameObject.getBehaviors().push(aComponent);
+        
+        
         
         }
         this.m_RootGameObject.getChildren().push(gameObject);
