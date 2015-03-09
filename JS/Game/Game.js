@@ -46,7 +46,7 @@ function drawTest() //Move somewhere else once game includes have been converted
         3, //Pos size
         glContext.FLOAT,
         false, 
-        4*(3+2), //stride is size of vertex format in bytes. 4 is float size, 3 pos, 2 uv 
+        4*(3+2+3), //stride is size of vertex format in bytes. 4 is float size, 3 pos, 2 uv 
         0 
     
     );
@@ -58,8 +58,20 @@ function drawTest() //Move somewhere else once game includes have been converted
         2, //UV size
         glContext.FLOAT,
         false, 
-        4*(3+2), //stride is size of vertex format in bytes. 4 is float size, 3 pos, 2 uv 
+        4*(3+2+3), //stride is size of vertex format in bytes. 4 is float size, 3 pos, 2 uv 
         4*3 
+    
+    );
+    
+    //Normal attribute pointer
+    glContext.vertexAttribPointer
+    (
+        shaderProgram.normalAttribute,
+        3, //Normal size
+        glContext.FLOAT,
+        false, 
+        4*(3+2+3), //stride is size of vertex format in bytes. 4 is float size, 3 pos, 2 uv 
+        4*(3+2) 
     
     );
     
@@ -76,11 +88,14 @@ function drawTest() //Move somewhere else once game includes have been converted
     //
     glContext.useProgram(shaderProgram);
         
-    shaderProgram.vertexPositionAttribute = glContext.getAttribLocation( shaderProgram, "vPos" );
+    shaderProgram.vertexPositionAttribute = glContext.getAttribLocation( shaderProgram, "a_Pos" );
     glContext.enableVertexAttribArray( shaderProgram.vertexPositionAttribute);
     
-    shaderProgram.uvAttribute             = glContext.getAttribLocation( shaderProgram, "vUV"  );
+    shaderProgram.uvAttribute             = glContext.getAttribLocation( shaderProgram, "a_UV"  );
     glContext.enableVertexAttribArray( shaderProgram.uvAttribute            );
+    
+    shaderProgram.normalAttribute         = glContext.getAttribLocation( shaderProgram, "a_Normal"  );
+    glContext.enableVertexAttribArray( shaderProgram.normalAttribute        );
     
     //
     // Pass in uniform data
@@ -127,6 +142,66 @@ function drawTest() //Move somewhere else once game includes have been converted
     
 };
 
+var cameraPosition = [0,0,0];
+var cameraRotation = [0,0,0];
+var cameraDeltaSize = 0.05;
+function cameraControllerUpdate()
+{
+    //
+    //Buffer data
+    //
+    //Rotation data
+    if (INPUT.getKeys()[69])//Clockwise
+        cameraRotation[1] += Math.PI /180;
+    
+    if (INPUT.getKeys()[81])//Counterclockwise
+        cameraRotation[1] -= Math.PI /180;
+    
+    //Translation data
+    if (INPUT.getKeys()[65])//left
+    {
+        cameraPosition[0] += Math.sin(cameraRotation[1] + (90 * Math.PI /180))/10;
+        cameraPosition[2] -= Math.cos(cameraRotation[1] + (90 * Math.PI /180))/10;
+     
+    }
+    
+    if (INPUT.getKeys()[68])//right
+    {
+        cameraPosition[0] -= Math.sin(cameraRotation[1] + (90 * Math.PI /180))/10;
+        cameraPosition[2] += Math.cos(cameraRotation[1] + (90 * Math.PI /180))/10;
+     
+    }
+    
+    if (INPUT.getKeys()[87])//forward
+    {
+        cameraPosition[0] -= Math.sin(cameraRotation[1])/10;
+        cameraPosition[2] += Math.cos(cameraRotation[1])/10;
+     
+    }
+     
+    if (INPUT.getKeys()[83])//backward
+    {
+        cameraPosition[0] += Math.sin(cameraRotation[1])/10;
+        cameraPosition[2] -= Math.cos(cameraRotation[1])/10;
+     
+    }
+     
+    if (INPUT.getKeys()[90])//down
+        cameraPosition[1] -= 1 *cameraDeltaSize;
+        
+    if (INPUT.getKeys()[88])//up
+        cameraPosition[1] += 1 *cameraDeltaSize;
+
+    //
+    //Create viewmatrix
+    //
+    mat4.identity(GRAPHICS.getViewMatrix());
+    mat4.rotate(GRAPHICS.getViewMatrix(),cameraRotation[1],[0,1,0]);
+    
+    mat4.translate(GRAPHICS.getViewMatrix(),(cameraPosition));
+
+}
+
 Game.prototype = new GameBase();
 Game.prototype.constructor = Game;
 
@@ -149,29 +224,8 @@ function Game()
             gameObject.getTransform().setPosition([0,0,-10]);
             
             var aComponent = new Component();
-            aComponent.update = function()
-            {
-                if (INPUT.getKeys()[65])//left
-                    mat4.translate(GRAPHICS.getViewMatrix(),[0.05,0,0]);
-                
-                if (INPUT.getKeys()[68])//right
-                    mat4.translate(GRAPHICS.getViewMatrix(),[-0.05,0,0]);
-
-                if (INPUT.getKeys()[87])//up
-                    mat4.translate(GRAPHICS.getViewMatrix(),[0,0,0.05]);
-                    
-                if (INPUT.getKeys()[83])//down
-                    mat4.translate(GRAPHICS.getViewMatrix(),[0,0,-0.05]);
-                    
-                //Clockwise Y
-                if (INPUT.getKeys()[69])//down
-                    mat4.rotate(GRAPHICS.getViewMatrix(),0.025,[0,1,0]);
-                
-                //Counterclockwise Y
-                if (INPUT.getKeys()[81])//down
-                    mat4.rotate(GRAPHICS.getViewMatrix(),0.025,[0,-1,0]);
+            aComponent.update = cameraControllerUpdate;
             
-            }
             
             gameObject.getBehaviors().push(aComponent);
         

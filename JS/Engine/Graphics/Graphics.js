@@ -56,9 +56,10 @@ function Graphics()
     this.getShaderPrograms     = function(){return shaderPrograms;};
     this.getShader             = function(y){return shaderPrograms.find(function(x){return x.getName() == y ? true : false;})};    
     this.getProjectionMatrix   = function(){return projectionMatrix;};
-    this.getViewMatrix         = function(){return viewMatrix;};
     this.getTextures           = function(){return textures;};
     this.getTexture            = function(y){return textures.find(function(x){return x.getName() == y ? true : false;})};
+    
+    this.getViewMatrix         = function(){return viewMatrix;};
     
     //*********
     // Methods
@@ -194,19 +195,19 @@ function Graphics()
         
         var vertices = 
         [
-            //           x,               y,    z,   u,   v,  
-           size -(size/2),  size -(size/2),  0.0, 1.0, 0.0, // 1--0
-           0.0  -(size/2),  size -(size/2),  0.0, 0.0, 0.0, // | /
-           0.0  -(size/2),  0.0  -(size/2),  0.0, 0.0, 1.0, // 2
+            //          x,               y,    z,   u,   v,  Nx,  Ny,  Nz,
+           size -(size/2),  size -(size/2),  0.0, 1.0, 0.0, 0.0, 0.0, 1.0, // 1--0
+           0.0  -(size/2),  size -(size/2),  0.0, 0.0, 0.0, 0.0, 0.0, 1.0, // | /
+           0.0  -(size/2),  0.0  -(size/2),  0.0, 0.0, 1.0, 0.0, 0.0, 1.0, // 2
                                             
-           size -(size/2),  size -(size/2),  0.0, 1.0, 0.0, //    0
-           0.0  -(size/2),  0.0  -(size/2),  0.0, 0.0, 1.0, //  / |
-           size -(size/2),  0.0  -(size/2),  0.0, 1.0, 1.0, // 1--2
+           size -(size/2),  size -(size/2),  0.0, 1.0, 0.0, 0.0, 0.0, 1.0, //    0
+           0.0  -(size/2),  0.0  -(size/2),  0.0, 0.0, 1.0, 0.0, 0.0, 1.0, //  / |
+           size -(size/2),  0.0  -(size/2),  0.0, 1.0, 1.0, 0.0, 0.0, 1.0, // 1--2
             
         ];
         
         glContext.bufferData( glContext.ARRAY_BUFFER, new Float32Array(vertices), glContext.STATIC_DRAW );
-        QuadVertexArray.itemSize = 5;
+        QuadVertexArray.itemSize = 8;
         QuadVertexArray.numItems = 6;
         
         //
@@ -228,15 +229,15 @@ function Graphics()
         
         var vertices = 
         [
-            //           x,               y,    z,   u,   v,  
-           size -(size/2),  size -(size/2),  0.0, 1.0, 0.0, // 1--0
-           0.0  -(size/2),  size -(size/2),  0.0, 0.0, 0.0, // | /
-           0.0  -(size/2),  0.0  -(size/2),  0.0, 0.0, 1.0, // 2
+            //          x,               y,    z,   u,   v,  Nx,  Ny,  Nz,
+           size -(size/2),  size -(size/2),  0.0, 1.0, 0.0, 0.0, 0.0, 0.0, // 1--0
+           0.0  -(size/2),  size -(size/2),  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, // | /
+           0.0  -(size/2),  0.0  -(size/2),  0.0, 0.0, 1.0, 0.0, 0.0, 0.0, // 2
             
         ];
         
         glContext.bufferData( glContext.ARRAY_BUFFER, new Float32Array(vertices), glContext.STATIC_DRAW );
-        TriVertexArray.itemSize = 5;
+        TriVertexArray.itemSize = 8;
         TriVertexArray.numItems = 3;
         
         //
@@ -259,70 +260,69 @@ function Graphics()
         var vertices = 
         [
            //North
-           //           x,               y,    z,   u,   v,  
-           size -(size/2),  size -(size/2),  -size/2, 0.0, 0.0, // 2--0
-           0.0  -(size/2),  0.0  -(size/2),  -size/2, 1.0, 1.0, // | /
-           0.0  -(size/2),  size -(size/2),  -size/2, 1.0, 0.0, // 1
-           
-                                            
-           size -(size/2),  size -(size/2),  -size/2, 0.0, 0.0, //    0
-           size -(size/2),  0.0  -(size/2),  -size/2, 0.0, 1.0, //  / |
-           0.0  -(size/2),  0.0  -(size/2),  -size/2, 1.0, 1.0, // 2--1
+           //           x,               y,        z,   u,   v,  Nx,  Ny,   Nz,
+           size -(size/2),  size -(size/2),  -size/2, 0.0, 0.0, 0.0, 0.0, -1.0, // 2--0
+           0.0  -(size/2),  0.0  -(size/2),  -size/2, 1.0, 1.0, 0.0, 0.0, -1.0, // | /
+           0.0  -(size/2),  size -(size/2),  -size/2, 1.0, 0.0, 0.0, 0.0, -1.0, // 1
+                            
+           size -(size/2),  size -(size/2),  -size/2, 0.0, 0.0, 0.0, 0.0, -1.0, //    0
+           size -(size/2),  0.0  -(size/2),  -size/2, 0.0, 1.0, 0.0, 0.0, -1.0, //  / |
+           0.0  -(size/2),  0.0  -(size/2),  -size/2, 1.0, 1.0, 0.0, 0.0, -1.0, // 2--1
            
            //South
-           //           x,               y,    z,   u,   v,  
-           size -(size/2),  size -(size/2),  size/2, 1.0, 0.0, // 1--0
-           0.0  -(size/2),  size -(size/2),  size/2, 0.0, 0.0, // | /
-           0.0  -(size/2),  0.0  -(size/2),  size/2, 0.0, 1.0, // 2
+           //           x,               y,        z,   u,   v,   Nx,  Ny,   Nz,
+           size -(size/2),  size -(size/2),   size/2, 1.0, 0.0,  0.0, 0.0, +1.0, // 1--0
+           0.0  -(size/2),  size -(size/2),   size/2, 0.0, 0.0,  0.0, 0.0, +1.0, // | /
+           0.0  -(size/2),  0.0  -(size/2),   size/2, 0.0, 1.0,  0.0, 0.0, +1.0, // 2
                                             
-           size -(size/2),  size -(size/2),  size/2, 1.0, 0.0, //    0
-           0.0  -(size/2),  0.0  -(size/2),  size/2, 0.0, 1.0, //  / |
-           size -(size/2),  0.0  -(size/2),  size/2, 1.0, 1.0, // 1--2
+           size -(size/2),  size -(size/2),   size/2, 1.0, 0.0,  0.0, 0.0, +1.0, //    0
+           0.0  -(size/2),  0.0  -(size/2),   size/2, 0.0, 1.0,  0.0, 0.0, +1.0, //  / |
+           size -(size/2),  0.0  -(size/2),   size/2, 1.0, 1.0,  0.0, 0.0, +1.0, // 1--2
            
            //West
-           //           x,              y,       z,   u,   v,  
-           0.0  -(size/2), size -(size/2),  size/2, 1.0, 0.0, // 2--0
-           0.0  -(size/2), size -(size/2), -size/2, 0.0, 0.0, // | /
-           0.0  -(size/2), 0.0  -(size/2), -size/2, 0.0, 1.0, // 1
+           //           x,              y,         z,   u,   v,   Nx,  Ny,  Nz,
+           0.0  -(size/2), size -(size/2),    size/2, 1.0, 0.0, -1.0, 0.0, 0.0, // 2--0
+           0.0  -(size/2), size -(size/2),   -size/2, 0.0, 0.0, -1.0, 0.0, 0.0, // | /
+           0.0  -(size/2), 0.0  -(size/2),   -size/2, 0.0, 1.0, -1.0, 0.0, 0.0, // 1
                       
-           0.0 -(size/2),  size -(size/2),  size/2, 1.0, 0.0, //    0
-           0.0 -(size/2),  0.0  -(size/2), -size/2, 0.0, 1.0, //  / |
-           0.0 -(size/2),  0.0  -(size/2),  size/2, 1.0, 1.0, // 2--1
+           0.0 -(size/2),  size -(size/2),    size/2, 1.0, 0.0, -1.0, 0.0, 0.0, //    0
+           0.0 -(size/2),  0.0  -(size/2),   -size/2, 0.0, 1.0, -1.0, 0.0, 0.0, //  / |
+           0.0 -(size/2),  0.0  -(size/2),    size/2, 1.0, 1.0, -1.0, 0.0, 0.0, // 2--1
            
            //East
-           //          x,               y,       z,   u,   v,  
-           size -(size/2),  size -(size/2),  size/2, 0.0, 0.0, // 2--0
-           size -(size/2),  0.0  -(size/2), -size/2, 1.0, 1.0, // | /
-           size -(size/2),  size -(size/2), -size/2, 1.0, 0.0, // 1
-                      
-           size -(size/2),  size -(size/2),  size/2, 0.0, 0.0, //    0
-           size -(size/2),  0.0  -(size/2),  size/2, 0.0, 1.0, //  / |
-           size -(size/2),  0.0  -(size/2), -size/2, 1.0, 1.0, // 2--1
+           //           x,               y,        z,   u,   v,   Nx,   Ny,  Nz,
+           size -(size/2),  size -(size/2),   size/2, 0.0, 0.0, +1.0,  0.0, 0.0, // 2--0
+           size -(size/2),  0.0  -(size/2),  -size/2, 1.0, 1.0, +1.0,  0.0, 0.0, // | /
+           size -(size/2),  size -(size/2),  -size/2, 1.0, 0.0, +1.0,  0.0, 0.0, // 1
+                                                                       
+           size -(size/2),  size -(size/2),   size/2, 0.0, 0.0, +1.0,  0.0, 0.0, //    0
+           size -(size/2),  0.0  -(size/2),   size/2, 0.0, 1.0, +1.0,  0.0, 0.0, //  / |
+           size -(size/2),  0.0  -(size/2),  -size/2, 1.0, 1.0, +1.0,  0.0, 0.0, // 2--1
            
            //Down
-           //           x,               y,    z,   u,   v,  
-           size -(size/2),  0.0 -(size/2), -size/2, 1.0, 0.0, // 2--0
-           0.0  -(size/2),  0.0 -(size/2),  size/2, 0.0, 1.0, // | /
-           0.0  -(size/2),  0.0 -(size/2), -size/2, 0.0, 0.0, // 1
+           //           x,              y,         z,   u,   v,   Nx,  Ny,  Nz,
+           size -(size/2),  0.0 -(size/2),   -size/2, 1.0, 0.0,  0.0, -1.0, 0.0, // 2--0
+           0.0  -(size/2),  0.0 -(size/2),    size/2, 0.0, 1.0,  0.0, -1.0, 0.0, // | /
+           0.0  -(size/2),  0.0 -(size/2),   -size/2, 0.0, 0.0,  0.0, -1.0, 0.0, // 1
                                             
-           size -(size/2),  0.0  -(size/2), -size/2, 1.0, 0.0, //    0
-           size -(size/2),  0.0  -(size/2),  size/2, 1.0, 1.0, //  / |
-           0.0  -(size/2),  0.0  -(size/2),  size/2, 0.0, 1.0, // 2--1
+           size -(size/2),  0.0  -(size/2),  -size/2, 1.0, 0.0,  0.0, -1.0, 0.0, //    0
+           size -(size/2),  0.0  -(size/2),   size/2, 1.0, 1.0,  0.0, -1.0, 0.0, //  / |
+           0.0  -(size/2),  0.0  -(size/2),   size/2, 0.0, 1.0,  0.0, -1.0, 0.0, // 2--1
            
            //Up
-           //           x,               y,    z,   u,   v,  
-           size -(size/2),  1.0 -(size/2), -size/2, 1.0, 0.0, // 1--0
-           0.0  -(size/2),  1.0 -(size/2), -size/2, 0.0, 0.0, // | /
-           0.0  -(size/2),  1.0 -(size/2),  size/2, 0.0, 1.0, // 2
-                                            
-           size -(size/2),  1.0  -(size/2), -size/2, 1.0, 0.0, //    0
-           0.0  -(size/2),  1.0  -(size/2),  size/2, 0.0, 1.0, //  / |
-           size -(size/2),  1.0  -(size/2),  size/2, 1.0, 1.0, // 1--2
+           //           x,               y,       z,   u,   v,    Nx,   Ny,  Nz,
+           size -(size/2),  1.0  -(size/2), -size/2, 1.0, 0.0,   0.0, +1.0, 0.0, // 1--0
+           0.0  -(size/2),  1.0  -(size/2), -size/2, 0.0, 0.0,   0.0, +1.0, 0.0, // | /
+           0.0  -(size/2),  1.0  -(size/2),  size/2, 0.0, 1.0,   0.0, +1.0, 0.0, // 2
+                                                                       
+           size -(size/2),  1.0  -(size/2), -size/2, 1.0, 0.0,   0.0, +1.0, 0.0, //    0
+           0.0  -(size/2),  1.0  -(size/2),  size/2, 0.0, 1.0,   0.0, +1.0, 0.0, //  / |
+           size -(size/2),  1.0  -(size/2),  size/2, 1.0, 1.0,   0.0, +1.0, 0.0, // 1--2
             
         ];
         
         glContext.bufferData( glContext.ARRAY_BUFFER, new Float32Array(vertices), glContext.STATIC_DRAW );
-        CubeVertexArray.itemSize =  5;
+        CubeVertexArray.itemSize =  8;
         CubeVertexArray.numItems = 36;
         
         //

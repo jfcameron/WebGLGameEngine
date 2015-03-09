@@ -22,11 +22,13 @@ Author: Joseph Cameron
     // Vertex Formats
     //***************
     //VertIn
-    attribute highp vec3 vPos ;
-    attribute lowp  vec2 vUV  ;
+    attribute highp vec3 a_Pos    ;
+    attribute lowp  vec2 a_UV     ;
+    attribute lowp  vec3 a_Normal ;
     
     //FragIn
-    varying lowp vec2 v_UV;
+    varying lowp vec2 v_UV     ;
+    varying lowp vec3 v_Normal ;
     
     //*********
     // Uniforms
@@ -49,12 +51,11 @@ Author: Joseph Cameron
     void main()
     {
         //Calculate position
-        highp vec4 position = vec4(vPos,1.0);
+        highp vec4 position = vec4(a_Pos,1.0);
         {
             //Model space operations       
             
             position *= _ModelScaleMatrix;
-            
             
             position *= _ModelRotationMatrix;
             
@@ -67,7 +68,6 @@ Author: Joseph Cameron
             //World space operations
             
             position = _Object2WorldMatrix * position;
-            
             
            
             
@@ -86,7 +86,10 @@ Author: Joseph Cameron
         gl_Position = position;
         
         //Passthrough UV
-        v_UV = vUV;
+        v_UV = a_UV;
+        
+        //Passthough Normal
+        v_Normal = a_Normal;
         
     }
   
@@ -100,6 +103,7 @@ Author: Joseph Cameron
     // FragmentIn vertex format
     //*************************
     varying lowp vec2 v_UV;
+    varying lowp vec3 v_Normal ;
     
     //*********
     // Uniforms
@@ -115,6 +119,7 @@ Author: Joseph Cameron
     //*********************************
     // Fragment operations forward decs
     //*********************************
+    vec4 calculateDiffuseLighting(const vec4 aColor, const vec3 aNormal, const vec3 aLightPos, const vec4 aLightColor);
     vec4 calculateTexelColor(const vec4 aFrag);
     vec4 alphaCutOff(const vec4 aFrag);
     
@@ -126,7 +131,14 @@ Author: Joseph Cameron
         lowp vec4 rvalue = vec4(0);
         {
             rvalue = calculateTexelColor(rvalue);
-            //rvalue = alphaCutOff(rvalue);
+            
+            
+            
+            //Calculate diffuse color
+            lowp vec4 lightColor   = vec4(1.0,1.0,1.0,1.0);
+            mediump vec3 lightPos = vec3(0.5,1.0,2.0);
+            rvalue = calculateDiffuseLighting(rvalue, v_Normal, lightPos, lightColor);
+            
             
         }
     
@@ -137,6 +149,20 @@ Author: Joseph Cameron
     //*******************************
     //Fragment operations definitions
     //*******************************
+    vec4 calculateDiffuseLighting(const vec4 aColor, const vec3 aNormal, const vec3 aLightPos, const vec4 aLightColor)
+    {
+        vec4 rvalue = aColor;
+        {
+            lowp vec3 aLightDir    = normalize(aLightPos);
+            
+            rvalue *= aLightColor*dot(aNormal,aLightDir);
+
+        }
+        
+        return rvalue;
+    
+    }
+    
     vec4 calculateTexelColor(const vec4 aFrag)
     {
         vec4 rvalue = aFrag;
