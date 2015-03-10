@@ -46,6 +46,11 @@ function Graphics()
     var projectionMatrix    = null;
     var viewMatrix          = null;
     
+    //TODO: use this
+    var m_ActiveCamera = null;
+    this.getActiveCamera = function() {return m_ActiveCamera;};
+    this.setActiveCamera = function(aCamera) {m_ActiveCamera = aCamera;};
+    
     //**********
     // Accessors
     //**********

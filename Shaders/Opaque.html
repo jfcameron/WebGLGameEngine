@@ -27,8 +27,9 @@ Author: Joseph Cameron
     attribute lowp  vec3 a_Normal ;
     
     //FragIn
-    varying lowp vec2 v_UV     ;
-    varying lowp vec3 v_Normal ;
+    varying lowp  vec2 v_UV          ;
+    varying lowp  vec3 v_Normal      ;
+    varying highp vec3 v_WorldNormal ;
     
     //*********
     // Uniforms
@@ -53,17 +54,13 @@ Author: Joseph Cameron
         //Calculate position
         highp vec4 position = vec4(a_Pos,1.0);
         {
-            //Model space operations       
-            
             position *= _ModelScaleMatrix;
-            
             position *= _ModelRotationMatrix;
             
+            //Model space operations       
+         
             //Spin
-            //position[2] -= 10.0;
-            //position = rotateAroundY(position,_Time);
-            //position = rotateAroundX(position,-10.0);
-            
+            //position = rotateAroundY(position,_Time);            
             
             //World space operations
             
@@ -91,6 +88,20 @@ Author: Joseph Cameron
         //Passthough Normal
         v_Normal = a_Normal;
         
+        //Calc worldnormal
+        highp vec4 worldNormal = vec4(a_Normal,1.0);
+        {
+            worldNormal *= _ModelScaleMatrix    ;
+            //worldNormal = rotateAroundY(worldNormal,_Time);
+            worldNormal *= _ModelRotationMatrix ;
+            worldNormal *= _Object2WorldMatrix  ;
+        
+        }
+        
+        v_WorldNormal = vec3(worldNormal[0],worldNormal[1],worldNormal[2]);
+        
+        
+        
     }
   
  </script>
@@ -102,8 +113,9 @@ Author: Joseph Cameron
     //*************************
     // FragmentIn vertex format
     //*************************
-    varying lowp vec2 v_UV;
-    varying lowp vec3 v_Normal ;
+    varying lowp  vec2 v_UV          ;
+    varying lowp  vec3 v_Normal      ;
+    varying highp vec3 v_WorldNormal ;
     
     //*********
     // Uniforms
@@ -137,8 +149,9 @@ Author: Joseph Cameron
             //Calculate diffuse color
             lowp vec4 lightColor   = vec4(1.0,1.0,1.0,1.0);
             mediump vec3 lightPos = vec3(0.5,1.0,2.0);
-            rvalue = calculateDiffuseLighting(rvalue, v_Normal, lightPos, lightColor);
+            rvalue = calculateDiffuseLighting(rvalue, v_WorldNormal, lightPos, lightColor);
             
+            //rvalue = vec4(v_WorldNormal,1.0);
             
         }
     
@@ -153,9 +166,10 @@ Author: Joseph Cameron
     {
         vec4 rvalue = aColor;
         {
-            lowp vec3 aLightDir    = normalize(aLightPos);
+            lowp vec3 normal   = normalize(aNormal);
+            lowp vec3 lightDir = normalize(aLightPos);
             
-            rvalue *= aLightColor*dot(aNormal,aLightDir);
+            rvalue *= aLightColor*max(dot(normal,lightDir),0.05);
 
         }
         

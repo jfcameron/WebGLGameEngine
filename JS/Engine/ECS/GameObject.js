@@ -19,6 +19,7 @@ function GameObject()
     var m_Name      = "GameObject";
     var m_Transform = new Transform(this);
     var m_Mesh      = new Mesh(this);
+	var m_Rigidbody = new Rigidbody(this);
     var m_Behaviors = []  ;
     var m_Children  = []  ;
     var m_Parent    = null;
@@ -31,6 +32,7 @@ function GameObject()
     
     this.getTransform = function(){return m_Transform;};
     this.getMesh      = function(){return m_Mesh     ;};
+	this.getRigidbody = function(){return m_Rigidbody;};
     this.getBehaviors = function(){return m_Behaviors;};
     this.getChildren  = function(){return m_Children ;};
     
@@ -43,6 +45,7 @@ function GameObject()
         //console.log(this.getName() + ", " + this.getMesh().getGameObject().getName());
     
          m_Mesh.update();
+		 m_Rigidbody.update();
     
         for(var i = 0; i < m_Behaviors.length; i++)
             m_Behaviors[i].update();

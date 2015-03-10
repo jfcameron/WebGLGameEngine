@@ -11,6 +11,10 @@ var TIME     = null;
 //********************
 function Start()
 {
+    //Init GRAPHICS
+    GRAPHICS = new Graphics();
+    GRAPHICS.start();
+
     //init TIME
     TIME = new Time();
     TIME.start();
@@ -19,9 +23,9 @@ function Start()
     INPUT = new Input();
     INPUT.start();
 
-    //Init GRAPHICS
-    GRAPHICS = new Graphics();
-    GRAPHICS.start();
+    //Init PHYSICS
+	PHYSICS = new Physics();
+	PHYSICS.start();
 
     //Init GAME
      GAME = new Game();
@@ -35,11 +39,17 @@ function Start()
 //**********
 function Update()
 {
-    TIME.update();
-    GRAPHICS.update();
-    
+	GRAPHICS.update();
+
     if (GAME != undefined)
         GAME.update();
+
+    TIME   .update();
+    INPUT  .update();
+	PHYSICS.update();
+    
+    
+    
 
 }
 

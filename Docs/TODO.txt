@@ -4,6 +4,7 @@ Short term
 Decouple primary camera from Graphics.js
 Add parent translation, rotation, scaling to model matrix retrieval before drawing.
 Incorporate a physics engine
+Add ambient light
 
 
 -----------

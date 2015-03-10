@@ -34,13 +34,13 @@ function Transform(ownerGameObject)
     this.setScale    = function(aScale){m_Scale = aScale;}
     
     this.getRotation = function(){return m_Rotation;};
+    this.setRotation = function(aRotation){m_Rotation = aRotation;};
     
     this.getLocalScaleMatrix = function()
     {
         var output = mat4.create();
         {
             mat4.identity(output);
-            
             mat4.scale(output,m_Scale);
                         
         }

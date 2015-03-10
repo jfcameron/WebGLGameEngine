@@ -151,11 +151,22 @@ function cameraControllerUpdate()
     //Buffer data
     //
     //Rotation data
-    if (INPUT.getKeys()[69])//Clockwise
-        cameraRotation[1] += Math.PI /180;
+    //if (INPUT.getKeys()[69])//Clockwise
+    //if (INPUT.getMouseDelta()[0] > 0)
+    //    cameraRotation[1] += Math.PI /180;
     
-    if (INPUT.getKeys()[81])//Counterclockwise
-        cameraRotation[1] -= Math.PI /180;
+    //if (INPUT.getKeys()[81])//Counterclockwise
+    //if (INPUT.getMouseDelta()[0] < 0)
+    //    cameraRotation[1] -= Math.PI /180;
+    
+    cameraRotation[1] += INPUT.getMouseDelta()[0]*Math.PI /180;
+    cameraRotation[0] += INPUT.getMouseDelta()[1]*Math.PI /180;
+    
+    //clamp
+    if (cameraRotation[0] > Math.PI/2)
+        cameraRotation[0] = Math.PI/2;
+    else if (cameraRotation[0] < -Math.PI/2)
+        cameraRotation[0] = -Math.PI/2;
     
     //Translation data
     if (INPUT.getKeys()[65])//left
@@ -186,17 +197,20 @@ function cameraControllerUpdate()
      
     }
      
-    if (INPUT.getKeys()[90])//down
+    if (INPUT.getKeys()[32])//down
         cameraPosition[1] -= 1 *cameraDeltaSize;
         
-    if (INPUT.getKeys()[88])//up
+    if (INPUT.getKeys()[17])//up
         cameraPosition[1] += 1 *cameraDeltaSize;
-
+    
     //
     //Create viewmatrix
     //
     mat4.identity(GRAPHICS.getViewMatrix());
+    mat4.rotate(GRAPHICS.getViewMatrix(),cameraRotation[0],[1,0,0]);
     mat4.rotate(GRAPHICS.getViewMatrix(),cameraRotation[1],[0,1,0]);
+    
+    
     
     mat4.translate(GRAPHICS.getViewMatrix(),(cameraPosition));
 
@@ -234,6 +248,17 @@ function Game()
         }
         this.m_RootGameObject.getChildren().push(gameObject);
         
+        //Init test object 3
+        var test3 = new GameObject();
+        {
+            test3.setName("TriTest");    
+            test3.getMesh().draw = drawTest;
+            test3.getMesh().setVertexBuffer(GRAPHICS.getTriVertexArray());
+            test3.getTransform().setPosition([10,10,10]);
+        
+        }
+        this.m_RootGameObject.getChildren().push(test3);
+        
         //Init test object 2
         var whatIsJavaScript = new GameObject();
         {
@@ -241,31 +266,49 @@ function Game()
             whatIsJavaScript.getMesh().draw = drawTest;
             whatIsJavaScript.getMesh().setShader(GRAPHICS.getShader("Opaque"));
             whatIsJavaScript.getMesh().setMainTexture(GRAPHICS.getTextures()[1]);
-            whatIsJavaScript.getTransform().setPosition([2,1,-10]);
+            whatIsJavaScript.getTransform().setPosition([0,20,0]);
+            whatIsJavaScript.getTransform().setScale([1,1,1]);
+            //Init rb
+            whatIsJavaScript.getRigidbody().setMass(0.5);
+			whatIsJavaScript.getRigidbody().setShape(new CANNON.Box(new CANNON.Vec3(0,0,0)));
+			whatIsJavaScript.getRigidbody().init();
         
         }
         this.m_RootGameObject.getChildren().push(whatIsJavaScript);
         
-        //Init test object 3
-        var test3 = new GameObject();
+        //Init test object 2
+        var whatIsJavaScript2 = new GameObject();
         {
-            test3.setName("TriTest");    
-            test3.getMesh().draw = drawTest;
-            test3.getMesh().setVertexBuffer(GRAPHICS.getTriVertexArray());
-            test3.getTransform().setPosition([-10,10,-30]);
+            whatIsJavaScript2.setName("CubeTest2");    
+            whatIsJavaScript2.getMesh().draw = drawTest;
+            whatIsJavaScript2.getMesh().setShader(GRAPHICS.getShader("Opaque"));
+            whatIsJavaScript2.getMesh().setMainTexture(GRAPHICS.getTextures()[1]);
+            whatIsJavaScript2.getTransform().setPosition([0.5,1,0]);
+            whatIsJavaScript2.getTransform().setScale([1,1,1]);
+            //Init rb
+            whatIsJavaScript2.getRigidbody().setMass(1);
+			whatIsJavaScript2.getRigidbody().setShape(new CANNON.Box(new CANNON.Vec3(0,0,0)));
+			whatIsJavaScript2.getRigidbody().init();
         
         }
-        this.m_RootGameObject.getChildren().push(test3);
+        this.m_RootGameObject.getChildren().push(whatIsJavaScript2);
         
         //Init ground
         var groundObject = new GameObject();
         {
             groundObject.setName("Ground");    
-            groundObject.getMesh().draw = drawTest;
+            //init mesh
+			groundObject.getMesh().draw = drawTest;
             groundObject.getMesh().setShader(GRAPHICS.getShader("Opaque"));
             groundObject.getMesh().setMainTexture(GRAPHICS.getTextures()[2]);
-            groundObject.getTransform().setPosition([0,-2,-25]);
-            groundObject.getTransform().setScale([50,1,50]);
+            //init transform
+			groundObject.getTransform().setPosition([0,-10,0]);
+            groundObject.getTransform().setScale([100,1,100]);
+            groundObject.getTransform().setRotation([0,0,0]);
+			//init rigidbody
+			groundObject.getRigidbody().setMass(0);
+			groundObject.getRigidbody().setShape(new CANNON.Box(new CANNON.Vec3(0,0,0)));
+			groundObject.getRigidbody().init();
         
         }
         this.m_RootGameObject.getChildren().push(groundObject);
