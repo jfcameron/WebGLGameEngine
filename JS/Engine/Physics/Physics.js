@@ -1,3 +1,17 @@
+//***************************************************************************
+// Filename: Physics.js
+// Description: Wrapper for physics engine. Currently using cannon.js
+//  by routing physics calls through this object, keeps code portable &
+//  prevents game programmers from needing to learn the specifics of the
+//  underlying physics engine.
+// Author: Joseph Cameron
+//***************************************************************************
+// CHANGELOG
+//
+// Date: March 10th, 2015
+// Description: Initial implementation.
+// Author: Joseph Cameron
+//
 function Physics()
 {
 	var m_World = null;

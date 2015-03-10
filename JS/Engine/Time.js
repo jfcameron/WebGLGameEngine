@@ -9,6 +9,11 @@
 // Description: Initial implementation.
 // Author: Joseph Cameron
 //
+// Date: March 9th, 2015
+// Description: m_TimeSinceStart refactored into Time.js.
+//  Time now stores the handler returned by setInterval.
+// Author: Joseph Cameron
+//
 function Time()
 {
     //*************

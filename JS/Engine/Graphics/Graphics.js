@@ -19,7 +19,11 @@
 //
 // Date: March 5th, 2015
 // Description: created Graphics prototype. Beginning to refactor code into something extendible.
-//  Added a model matrix for awesome face (needs to be refactored), added a perspective matrix.
+//  Added a model matrix (needs to be refactored), added a perspective matrix.
+// Author: Joseph Cameron
+//
+// Date: March 6th, 2015
+// Description: removed model matrix. Model matricies now belong to gameobject mesh components.
 // Author: Joseph Cameron
 //
 function Graphics()

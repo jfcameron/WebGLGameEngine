@@ -10,10 +10,6 @@
 // Description: Initial implementation.
 // Author: Joseph Cameron
 //
-//Example function pointer assignment in JS
-//var material = new Material();
-//material.draw = function(){alert("hello")};
-//
 Mesh.prototype = new Component();  //Is a component
 Mesh.prototype.constructor = Mesh;
 

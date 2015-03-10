@@ -7,8 +7,16 @@
 //***************************************************************************
 // CHANGELOG
 //
-// Date: March 6st, 2015
+// Date: March 6th, 2015
 // Description: Initial implementation.
+// Author: Joseph Cameron
+//
+// Date: March 7th, 2015
+// Description: Added Mesh & transform.
+// Author: Joseph Cameron
+//
+// Date: March 10th, 2015
+// Description: Added rigidbody.
 // Author: Joseph Cameron
 //
 function GameObject()

@@ -197,10 +197,10 @@ function cameraControllerUpdate()
      
     }
      
-    if (INPUT.getKeys()[32])//down
+    if (INPUT.getKeys()[69])//down
         cameraPosition[1] -= 1 *cameraDeltaSize;
         
-    if (INPUT.getKeys()[17])//up
+    if (INPUT.getKeys()[81])//up
         cameraPosition[1] += 1 *cameraDeltaSize;
     
     //

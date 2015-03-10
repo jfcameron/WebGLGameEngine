@@ -10,12 +10,10 @@
 // KeyUp and KeyDown events handled.
 // Author: Joseph Cameron
 //
-//example input event
-//if (input.getKeys()[37])
-//{
-//    alert("hi");
+// Date: March 10th, 2015
+// Description: Added mouse handler
+// Author: Joseph Cameron
 //
-//}
 
 function Input()
 {
@@ -69,8 +67,8 @@ function Input()
             document.pointerLockElement       === canvas || //Cross browser call (future proofing)
             document.mozPointerLockElement    === canvas || //ff
             document.webkitPointerLockElement === canvas    //chrome
-           ) 
-            document.removeEventListener("mousemove", mouseMove, false);
+           ) {}
+            //document.removeEventListener("mousemove", mouseMove, false);
         else 
             document.addEventListener("mousemove", mouseMove, false);
 
