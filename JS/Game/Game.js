@@ -142,7 +142,7 @@ function drawTest() //Move somewhere else once game includes have been converted
     
 };
 
-var cameraPosition = [0,0,0];
+var cameraPosition = [0,+7,-8];
 var cameraRotation = [0,0,0];
 var cameraDeltaSize = 0.05;
 function cameraControllerUpdate()

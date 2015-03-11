@@ -2,42 +2,40 @@
 Short term
 ---------------
 Decouple primary camera from Graphics.js
-Add parent translation, rotation, scaling to model matrix retrieval before drawing.
-Incorporate a physics engine
-Add ambient light
+    Add activeCamera reference in graphics,
+    Write camera component: sets up viewport info, view, perspective mats.
 
+Add parent translation, rotation, scaling to model matrix retrieval before drawing.
+
+Fix rigidbody->mesh rotation data
+
+Add ambient light, 
+
+add point lights
+    Check frag instruction limit for webgl standards.
+    Write point light component, manages point light uniform blocks.
+
+add shadowmaps
+
+add post processing effects
+
+Opaque.glsl: Move light pos to uniform
 
 -----------
 Long term
 ---------
-Opaque.glsl: Move light pos to uniform
-
 Lighting system
 
 Add additional sets of uv attributes, incase custom vertex data is required.
-
-Fix ECM linking: move ECM includes to iframe, load iframe from main.html
-
-move all include groupings into appropriately named iframe includes
 
 Default uniforms like _Time, _MVP, _Model, _VP
 
 Create VBOs for basic shapes: circle, sphere, pyramid.
 
-Create a mesh object: 
-    has a draw function to set up opengl blend states, draw mode etc. 
-    Has a reference to a vbo,
-    Has a reference to the shader to use (Separating shader from draw funct will allow shader changes at runtime).
-    Has a reference to the texture to use.
-    How should it handle uniforms?
-
-Look into 2d and 3d physics solutions.
-    Does WebGL's current standard support compute shaders?
-    Are there JS physics libraries? Are they used in any commercial projects?
-
 ---------
 DONE
 ---------
+Incorporate a physics engine
 Camera controls in demo scene
 Added normal to vertex attributes
 Fixed viewmatrix. Currently rotate and translate is backwards (translate -> rotate), meaning camera always orbits zero.
