@@ -46,6 +46,9 @@ function Graphics()
     var TriVertexArray      = null; //Reference to the VBO containing Triangle vertex data
     var CubeVertexArray     = null;    
     
+	//Lighting data
+	var m_AmbientLight = [1,1,1,1];
+	
     //Camera data, should be refactored to allow for variable # of cameras
     var projectionMatrix    = null;
     var viewMatrix          = null;

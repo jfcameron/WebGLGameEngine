@@ -47,6 +47,14 @@ function GameObject()
     //*********************
     // GameObject interface
     //*********************
+	this.addBehavior = function(aBehavior)
+	{
+		aBehavior.setGameObject(this);
+	
+		m_Behaviors.push(aBehavior);
+	
+	};
+	
     this.update = function()
     {
         //console.log(this.getName() + ": " +this.getTransform().getPosition());

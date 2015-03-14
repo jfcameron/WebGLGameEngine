@@ -30,6 +30,7 @@ Author: Joseph Cameron
     varying lowp  vec2 v_UV          ;
     varying lowp  vec3 v_Normal      ;
     varying highp vec3 v_WorldNormal ;
+	varying highp vec3 v_FragPosition;
     
     //*********
     // Uniforms
@@ -65,8 +66,8 @@ Author: Joseph Cameron
             //World space operations
             
             position = _Object2WorldMatrix * position;
-            
-           
+                  
+            v_FragPosition = vec3(position);
             
             //Camera space operations
             position = _ViewMatrix * position;
@@ -92,14 +93,12 @@ Author: Joseph Cameron
         highp vec4 worldNormal = vec4(a_Normal,1.0);
         {
             worldNormal *= _ModelScaleMatrix    ;
-            //worldNormal = rotateAroundY(worldNormal,_Time);
             worldNormal *= _ModelRotationMatrix ;
             worldNormal *= _Object2WorldMatrix  ;
         
         }
         
-        v_WorldNormal = vec3(worldNormal[0],worldNormal[1],worldNormal[2]);
-        
+        v_WorldNormal = worldNormal.xyz;
         
         
     }
@@ -116,12 +115,14 @@ Author: Joseph Cameron
     varying lowp  vec2 v_UV          ;
     varying lowp  vec3 v_Normal      ;
     varying highp vec3 v_WorldNormal ;
+	varying highp vec3 v_FragPosition;
     
     //*********
     // Uniforms
     //*********
-    uniform lowp vec4 _Color;
-    uniform sampler2D _Texture;
+    uniform lowp vec4    _Color;
+    uniform sampler2D    _Texture;
+	uniform mediump vec3 _CameraPos;
     
     //**********
     // Constants
@@ -131,10 +132,12 @@ Author: Joseph Cameron
     //*********************************
     // Fragment operations forward decs
     //*********************************
-    vec4 calculateDiffuseLighting(const vec4 aColor, const vec3 aNormal, const vec3 aLightPos, const vec4 aLightColor);
+    vec4 calculateDiffuseLighting(const vec3 aNormal, const vec3 aLightPos, const vec4 aLightColor, const float aStrength);
     vec4 calculateTexelColor(const vec4 aFrag);
-    vec4 alphaCutOff(const vec4 aFrag);
-    
+    vec4 calculateSpecularTerm(const vec3 aFragPos, const vec3 aWorldNormal, const vec3 aWorldLightPos, const vec3 aWorldCameraPos);
+   
+	vec4 alphaCutOff(const vec4 aFrag);
+	 
     //*****************
     // Fragment shader
     //****************
@@ -142,16 +145,19 @@ Author: Joseph Cameron
     {
         lowp vec4 rvalue = vec4(0);
         {
-            rvalue = calculateTexelColor(rvalue);
+			//Refactor to uniforms
+            lowp    vec4 lightColor = vec4(1.0 ,1.0 ,1.0 ,1.0); //TODO: refactor into ECS as "directional light"
+            mediump vec3 lightPos   = vec3(0.5 ,1.0 ,2.0)*10.0;
+			lowp    vec4 ambient    = vec4(0.01,0.01,0.01,1.0); // TODO: refactor into Graphics as "scene ambient light"
+			
+			//Blinnphong: Ambient + emissive + diffuse + specular
+			//rvalue += ambient;
+            rvalue += calculateTexelColor(rvalue);
+			rvalue *= calculateDiffuseLighting(v_WorldNormal, lightPos, lightColor, 1.0);
+			rvalue += calculateSpecularTerm(v_FragPosition, v_WorldNormal, lightPos, _CameraPos);
             
-            
-            
-            //Calculate diffuse color
-            lowp vec4 lightColor   = vec4(1.0,1.0,1.0,1.0);
-            mediump vec3 lightPos = vec3(0.5,1.0,2.0);
-            rvalue = calculateDiffuseLighting(rvalue, v_WorldNormal, lightPos, lightColor);
-            
-            //rvalue = vec4(v_WorldNormal,1.0);
+			
+			//rvalue = vec4(v_WorldNormal,1.0);
             
         }
     
@@ -162,20 +168,41 @@ Author: Joseph Cameron
     //*******************************
     //Fragment operations definitions
     //*******************************
-    vec4 calculateDiffuseLighting(const vec4 aColor, const vec3 aNormal, const vec3 aLightPos, const vec4 aLightColor)
+    vec4 calculateDiffuseLighting(const vec3 aNormal, const vec3 aLightPos, const vec4 aLightColor, const float aStrength)
     {
-        vec4 rvalue = aColor;
+        vec4 rvalue = vec4(0.0,0.0,0.0,0.0);
         {
             lowp vec3 normal   = normalize(aNormal);
             lowp vec3 lightDir = normalize(aLightPos);
             
-            rvalue *= aLightColor*max(dot(normal,lightDir),0.05);
+            rvalue = aStrength * aLightColor*max(dot(normal,lightDir),0.1);
 
         }
         
         return rvalue;
     
     }
+	
+	vec4 calculateSpecularTerm(const vec3 aFragPos, const vec3 aWorldNormal, const vec3 aWorldLightPos, const vec3 aWorldCameraPos)
+	{
+		vec4 rvalue = vec4(1.0);
+		{			
+			vec3 P = aFragPos;
+			vec3 L = normalize(aWorldLightPos + vec3(-aWorldCameraPos.x,-aWorldCameraPos.y,-aWorldCameraPos.z)  - P);
+			vec3 V = normalize(-aWorldCameraPos - P);
+			vec3 H = normalize(L+V);
+			vec3 N = normalize(aWorldNormal);
+			
+			if (dot(N,L) > 0.0)
+				rvalue *= pow(max(dot(N,H),0.0),50.0)*0.75;
+			else
+				rvalue = vec4(0.0);
+			
+		}
+		
+		return rvalue;
+	
+	}
     
     vec4 calculateTexelColor(const vec4 aFrag)
     {

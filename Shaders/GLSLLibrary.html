@@ -13,7 +13,11 @@ Date: March 5th, 2015
 Description: Initial Implementation.
  Added default float precision, definition for PI and rotateAroundZ
 Author: Joseph Cameron
-    
+
+Date: March 10th, 2015
+Description: Added Vertex and Fragment script elements.
+ These will serve as additional shader include data that is specific
+ to vertex or frag shaders. 
 -->
 <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 <meta content="utf-8" http-equiv="encoding">
@@ -56,6 +60,11 @@ Author: Joseph Cameron
     
     }
     
+    // Function name: rotateAroundY
+    // Arguments: vec4 pos, float degree
+    // Description: rotates a vertex around the y axis
+    // Example: pos = rotateAroundY(pos,_Time);
+    //
     vec4 rotateAroundY(const highp vec4 aPos, const highp float aDegree)
     {
         highp float radians = -aDegree * PI/180.0;
@@ -78,6 +87,11 @@ Author: Joseph Cameron
     
     }
     
+    // Function name: rotateAroundZ
+    // Arguments: vec4 pos, float degree
+    // Description: rotates a vertex around the z axis
+    // Example: pos = rotateAroundZ(pos,_Time);
+    //
     vec4 rotateAroundZ(const highp vec4 aPos, const highp float aDegree)
     {
         highp float radians = -aDegree * PI/180.0;
@@ -101,5 +115,16 @@ Author: Joseph Cameron
     }
 
 </script>
+
+<script id="Vertex">
+
+
+</script>
+
+<script id="Fragment">
+
+
+</script>
+
 
 </html>

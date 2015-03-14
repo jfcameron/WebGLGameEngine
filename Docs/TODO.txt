@@ -5,6 +5,8 @@ Decouple primary camera from Graphics.js
     Add activeCamera reference in graphics,
     Write camera component: sets up viewport info, view, perspective mats.
 
+Refactor hardcoded light dir, color, replace with uniforms. Add ambient light, add specular lighting.
+
 Add parent translation, rotation, scaling to model matrix retrieval before drawing.
 
 Fix rigidbody->mesh rotation data

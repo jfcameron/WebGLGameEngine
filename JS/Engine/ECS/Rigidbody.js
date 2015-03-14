@@ -1,3 +1,15 @@
+//************************************************************************
+// Filename: Rigidbody.js
+// Description: Holds data about this gameobject's rigidbody in the physics
+//  engine.
+// Author: Joseph Cameron
+//************************************************************************
+// CHANGELOG
+//
+// Date: March 6th, 2015
+// Description: Initial implementation.
+// Author: Joseph Cameron
+//
 function Rigidbody(aOwnerGameObject)
 {
 	//*************
@@ -9,7 +21,6 @@ function Rigidbody(aOwnerGameObject)
 	var m_Shape      = null; //Collider shape
 	//var m_Material   = null;
 	
-	
 	//**********
 	// Accessors
 	//**********
@@ -20,6 +31,8 @@ function Rigidbody(aOwnerGameObject)
 	
 	this.getShape = function(){return m_Shape;};
 	this.setShape = function(aShape){m_Shape = aShape;};
+	
+	this.getBody = function(){return m_Body;};
 	
 	//********************
 	// Rigidbody interface
@@ -46,21 +59,26 @@ function Rigidbody(aOwnerGameObject)
 	
 	this.update = function()
 	{
-		if (m_Body != undefined && m_Body.mass != 0)//Is dynamic
-        {
-			m_GameObject.getTransform().setPosition([parseFloat(m_Body.position.x),parseFloat(m_Body.position.y),parseFloat(m_Body.position.z)]);
-            //m_GameObject.getTransform().setRotation(
-            
-            var rotationBuffer = new CANNON.Vec3();
-            m_Body.quaternion.toEuler(rotationBuffer,"YZX");
-            
-            var xyzBuffer = [rotationBuffer.z,rotationBuffer.x,rotationBuffer.y];
-            
-            m_GameObject.getTransform().setRotation(xyzBuffer);
-            
-        }
+		if (m_Body == undefined)
+			return;
+		
+		//Update transform pos
+		m_GameObject.getTransform().setPosition([parseFloat(m_Body.position.x),parseFloat(m_Body.position.y),parseFloat(m_Body.position.z)]);
+		
+		//Update transform rotation
+		var rotationBuffer = new CANNON.Vec3();
+		m_Body.quaternion.toEuler(rotationBuffer,"YZX");
+		var xyzBuffer = [rotationBuffer.z,rotationBuffer.x,rotationBuffer.y];
+		m_GameObject.getTransform().setRotation(xyzBuffer);
+		
+		//if (m_GameObject.getName() == "CubeTest")
+		//	console.log(rotationBuffer);
         
 	};
+	
+	//******************
+	// Private functions
+	//*******************
 
 }
 

@@ -8,7 +8,11 @@
 // Date: March 7th, 2015
 // Description: Initial implementation.
 // Author: Joseph Cameron
+//// Date: March 11th, 2015
+// Description: Added rigidbody spawner to button 1
+// Author: Joseph Cameron
 //
+
 
 function drawTest() //Move somewhere else once game includes have been converted to iframe bundles
 {
@@ -134,6 +138,11 @@ function drawTest() //Move somewhere else once game includes have been converted
     glContext.activeTexture(glContext.TEXTURE0);
     glContext.bindTexture  (glContext.TEXTURE_2D, texture);
     glContext.uniform1i    (glContext.getUniformLocation(shaderProgram, "_Texture"), 0);
+	
+	//Camera world position uniform
+	var uCameraWorldPosition = glContext.getUniformLocation(shaderProgram,"_CameraPos");
+	if (uCameraWorldPosition != -1)
+		glContext.uniform3fv(uCameraWorldPosition,cameraPosition);
 
     //
     // draw
@@ -149,16 +158,7 @@ function cameraControllerUpdate()
 {
     //
     //Buffer data
-    //
-    //Rotation data
-    //if (INPUT.getKeys()[69])//Clockwise
-    //if (INPUT.getMouseDelta()[0] > 0)
-    //    cameraRotation[1] += Math.PI /180;
-    
-    //if (INPUT.getKeys()[81])//Counterclockwise
-    //if (INPUT.getMouseDelta()[0] < 0)
-    //    cameraRotation[1] -= Math.PI /180;
-    
+    //    
     cameraRotation[1] += INPUT.getMouseDelta()[0]*Math.PI /180;
     cameraRotation[0] += INPUT.getMouseDelta()[1]*Math.PI /180;
     
@@ -210,17 +210,47 @@ function cameraControllerUpdate()
     mat4.rotate(GRAPHICS.getViewMatrix(),cameraRotation[0],[1,0,0]);
     mat4.rotate(GRAPHICS.getViewMatrix(),cameraRotation[1],[0,1,0]);
     
-    
-    
     mat4.translate(GRAPHICS.getViewMatrix(),(cameraPosition));
 
+	
+	//test gen cube
+	if (INPUT.getKeys()[49])
+		GAME.testGenCube();
+	
 }
 
 Game.prototype = new GameBase();
 Game.prototype.constructor = Game;
 
+
+
 function Game()
 {    
+	//delete me
+	this.testGenCube = function()
+	{
+		var gameObject = new GameObject();
+		{
+			gameObject.setName("CubeTest");    
+			gameObject.getMesh().draw = drawTest;
+			gameObject.getMesh().setShader(GRAPHICS.getShader("Opaque"));
+			gameObject.getMesh().setMainTexture(GRAPHICS.getTextures()[1]);
+			gameObject.getTransform().setPosition([0,20,0]);
+			gameObject.getTransform().setScale([1,1,1]);
+			//Init rb
+			gameObject.getRigidbody().setMass(0.5);
+			gameObject.getRigidbody().setShape(new CANNON.Box(new CANNON.Vec3(0,0,0)));
+			
+			gameObject.getRigidbody().init();
+			
+			gameObject.getRigidbody().getBody().quaternion.setFromAxisAngle(new CANNON.Vec3(0,1,0), 45);
+			
+		}
+		
+		this.m_RootGameObject.getChildren().push(gameObject);
+		
+	}
+
     //***************
     // Game interface
     //***************
@@ -292,26 +322,9 @@ function Game()
         
         }
         this.m_RootGameObject.getChildren().push(whatIsJavaScript2);
-        
-        //Init ground
-        var groundObject = new GameObject();
-        {
-            groundObject.setName("Ground");    
-            //init mesh
-			groundObject.getMesh().draw = drawTest;
-            groundObject.getMesh().setShader(GRAPHICS.getShader("Opaque"));
-            groundObject.getMesh().setMainTexture(GRAPHICS.getTextures()[2]);
-            //init transform
-			groundObject.getTransform().setPosition([0,-10,0]);
-            groundObject.getTransform().setScale([100,1,100]);
-            groundObject.getTransform().setRotation([0,0,0]);
-			//init rigidbody
-			groundObject.getRigidbody().setMass(0);
-			groundObject.getRigidbody().setShape(new CANNON.Box(new CANNON.Vec3(0,0,0)));
-			groundObject.getRigidbody().init();
-        
-        }
-        this.m_RootGameObject.getChildren().push(groundObject);
+		
+        this.m_RootGameObject.getChildren().push(PREFABS.rotatorTest());
+        this.m_RootGameObject.getChildren().push(PREFABS.groundObject());
                 
     };
 
