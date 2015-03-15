@@ -67,6 +67,18 @@ function Transform(ownerGameObject)
     //incomplete
     this.getWorldMatrix = function()
     {   
+        //var parentWorldMatrix = null;
+        //
+        //if (m_GameObject.getParent() != null)
+        //{
+        //    if (m_GameObject.getParent().getTransform() != null)
+        //    {
+        //        parentWorldMatrix = m_GameObject.getParent().getTransform().getWorldMatrix();
+        //    
+        //    }
+        //
+        //}
+    
         var output = mat4.create();
         {
             mat4.identity(output);

@@ -26,6 +26,10 @@
 // Description: removed model matrix. Model matricies now belong to gameobject mesh components.
 // Author: Joseph Cameron
 //
+// Date: March 15th, 2015
+// Description: removed update and clear. Clear and update behaviors have been refactored into camera. 
+// Author: Joseph Cameron
+//
 function Graphics()
 {
     //*************
@@ -54,7 +58,7 @@ function Graphics()
     var viewMatrix          = null;
     
     //TODO: use this
-    var m_ActiveCamera = null;
+    var m_ActiveCamera   = null;//test
     this.getActiveCamera = function() {return m_ActiveCamera;};
     this.setActiveCamera = function(aCamera) {m_ActiveCamera = aCamera;};
     
@@ -62,16 +66,19 @@ function Graphics()
     // Accessors
     //**********
     this.getContext            = function(){return glContext      ;};
+    
     this.getQuadVertexArray    = function(){return QuadVertexArray;};
     this.getTriVertexArray     = function(){return TriVertexArray;};
     this.getCubeVertexArray    = function(){return CubeVertexArray;};
+    
     this.getShaderPrograms     = function(){return shaderPrograms;};
-    this.getShader             = function(y){return shaderPrograms.find(function(x){return x.getName() == y ? true : false;})};    
-    this.getProjectionMatrix   = function(){return projectionMatrix;};
+    this.getShader             = function(y){return shaderPrograms.find(function(x){return x.getName() == y ? true : false;})}; 
+    
     this.getTextures           = function(){return textures;};
     this.getTexture            = function(y){return textures.find(function(x){return x.getName() == y ? true : false;})};
     
     this.getViewMatrix         = function(){return viewMatrix;};
+    this.getProjectionMatrix   = function(){return projectionMatrix;};
     
     //*********
     // Methods
@@ -79,10 +86,15 @@ function Graphics()
     //Initializers  
     this.initopenglContext = function ()
     {
+        console.log("Init");
+    
         canvas                   = document.getElementById("canvas");
         glContext                = canvas.getContext( "webgl" ); //must be webgl
         glContext.viewportWidth  = canvas.width;
         glContext.viewportHeight = canvas.height;
+        
+        //glContext.viewport(0,0,canvas.width,canvas.height);
+        
     
     };
     
@@ -399,19 +411,6 @@ function Graphics()
         this.initMatricies();
         
         glContext.clearColor(clearColor[0],clearColor[1],clearColor[2],clearColor[3]);
-        
-    };
-    
-    this.clear = function () 
-    {        
-        glContext.viewport  ( 0, 0, glContext.viewportWidth, glContext.viewportHeight);
-        glContext.clear     ( glContext.COLOR_BUFFER_BIT | glContext.DEPTH_BUFFER_BIT );
-        
-    };
-    
-    this.update = function ()
-    {       
-        this.clear();
         
     };
     

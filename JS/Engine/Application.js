@@ -65,11 +65,13 @@ function Start()
 //**********
 function Update()
 {
-	GRAPHICS.update();
-
     if (GAME != undefined)
+    {
         GAME.update();
-
+        GAME.draw();
+        
+    }
+        
     TIME   .update();
     INPUT  .update();
 	PHYSICS.update();

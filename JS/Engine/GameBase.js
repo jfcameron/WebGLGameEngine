@@ -27,6 +27,10 @@ function GameBase()
     //*************
     this.m_RootGameObject = null;
     
+    var m_Cameras = [];
+    
+    this.getCameras = function(){return m_Cameras;};
+    
     //***************
     // Game interface
     //***************
@@ -46,6 +50,22 @@ function GameBase()
     this.update = function()
     {
         this.m_RootGameObject.update();
+        
+    };
+    
+    this.draw = function()
+    {    
+        //Draw scene for each camera
+        for(var i = 0; i < m_Cameras.length; i++)
+        {
+            GRAPHICS.setActiveCamera(m_Cameras[i]);
+            
+            if (m_Cameras[i].draw != undefined)
+                m_Cameras[i].draw();
+            
+            this.m_RootGameObject.draw();
+            
+        }
         
     };
     

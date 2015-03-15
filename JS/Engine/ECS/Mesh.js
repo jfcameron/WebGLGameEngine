@@ -45,8 +45,8 @@ function Mesh(ownerGameObject)
     
     this.update = function()
     {    
-        if (this.draw != undefined)
-            this.draw();
+        //if (this.draw != undefined)
+        //    this.draw();
     
     };
     

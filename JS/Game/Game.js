@@ -13,8 +13,31 @@
 // Author: Joseph Cameron
 //
 
+function cameraDrawTest()
+{
+    //
+    // Prep context
+    //
+    var glContext = GRAPHICS.getContext();
+    glContext.viewport  (0,0, glContext.viewportWidth/1, glContext.viewportHeight/1);
+    glContext.clear     ( glContext.COLOR_BUFFER_BIT | glContext.DEPTH_BUFFER_BIT );
+    
+    
+};
 
-function drawTest() //Move somewhere else once game includes have been converted to iframe bundles
+function cameraOverlayDrawTest()
+{
+    //
+    // Prep context
+    //
+    var glContext = GRAPHICS.getContext();
+    glContext.viewport  (0,0, glContext.viewportWidth/1, glContext.viewportHeight/1);
+    glContext.clear     ( glContext.DEPTH_BUFFER_BIT );
+    
+    
+};
+
+function drawTest() //Should be part of a material or some kind of shader/gl setup bundle
 {
     //*************
     // Marshal data
@@ -24,8 +47,8 @@ function drawTest() //Move somewhere else once game includes have been converted
     //Time
     var time             = TIME.getTime();//should be moved
     //Current camera
-    var viewMatrix       = GRAPHICS.getViewMatrix();//This should be part of a camera
-    var projectionMatrix = GRAPHICS.getProjectionMatrix();//this should be part of a camera
+    var viewMatrix       = GRAPHICS.getActiveCamera().getViewMatrix();//This should be part of a camera
+    var projectionMatrix = GRAPHICS.getActiveCamera().getProjectionMatrix();//this should be part of a camera
     //This gameobject
     var VertexArray      = this.getVertexBuffer();
     var shaderProgram    = this.getShader();
@@ -35,9 +58,15 @@ function drawTest() //Move somewhere else once game includes have been converted
     //Model Rotation
     var rotation   = this.getGameObject().getTransform().getLocalRotationMatrix();
     //This transform
-    var object2WorldMatrix = this.getGameObject().getTransform().getWorldMatrix();   
+    var object2WorldMatrix = this.getGameObject().getTransform().getWorldMatrix();
+    //Camera pos
+    var cameraPosition = GRAPHICS.getActiveCamera().getGameObject().getTransform().getPosition();
     
-    //console.log(this.getGameObject().getName().toString() + ", " + shaderProgram.getName() + ", " + texture.getName());
+    //setup culling
+    glContext.enable  (glContext.DEPTH_TEST);
+    glContext.enable  (glContext.CULL_FACE);
+    glContext.disable (glContext.CULL_FACE);
+    glContext.cullFace(glContext.BACK);
     
     //********************
     // Prepare vertex data
@@ -79,17 +108,9 @@ function drawTest() //Move somewhere else once game includes have been converted
     
     );
     
-    //
-    // Prep context
-    //
-    glContext.enable(glContext.DEPTH_TEST);
-    glContext.enable(glContext.CULL_FACE);
-    glContext.disable(glContext.CULL_FACE);
-    glContext.cullFace(glContext.BACK);
-    
-    //
+    //************
     // Prep shader
-    //
+    //************
     glContext.useProgram(shaderProgram);
         
     shaderProgram.vertexPositionAttribute = glContext.getAttribLocation( shaderProgram, "a_Pos" );
@@ -101,9 +122,9 @@ function drawTest() //Move somewhere else once game includes have been converted
     shaderProgram.normalAttribute         = glContext.getAttribLocation( shaderProgram, "a_Normal"  );
     glContext.enableVertexAttribArray( shaderProgram.normalAttribute        );
     
-    //
+    //*********************
     // Pass in uniform data
-    //
+    //*********************
     //Time uniform
     var uTime = glContext.getUniformLocation(shaderProgram,"_Time");
     if (uTime != -1)
@@ -144,113 +165,18 @@ function drawTest() //Move somewhere else once game includes have been converted
 	if (uCameraWorldPosition != -1)
 		glContext.uniform3fv(uCameraWorldPosition,cameraPosition);
 
-    //
+    //*****
     // draw
-    //
+    //*****
     glContext.drawArrays( glContext.TRIANGLES, 0, VertexArray.numItems );
     
 };
 
-var cameraPosition = [0,+7,-8];
-var cameraRotation = [0,0,0];
-var cameraDeltaSize = 0.05;
-function cameraControllerUpdate()
-{
-    //
-    //Buffer data
-    //    
-    cameraRotation[1] += INPUT.getMouseDelta()[0]*Math.PI /180;
-    cameraRotation[0] += INPUT.getMouseDelta()[1]*Math.PI /180;
-    
-    //clamp
-    if (cameraRotation[0] > Math.PI/2)
-        cameraRotation[0] = Math.PI/2;
-    else if (cameraRotation[0] < -Math.PI/2)
-        cameraRotation[0] = -Math.PI/2;
-    
-    //Translation data
-    if (INPUT.getKeys()[65])//left
-    {
-        cameraPosition[0] += Math.sin(cameraRotation[1] + (90 * Math.PI /180))/10;
-        cameraPosition[2] -= Math.cos(cameraRotation[1] + (90 * Math.PI /180))/10;
-     
-    }
-    
-    if (INPUT.getKeys()[68])//right
-    {
-        cameraPosition[0] -= Math.sin(cameraRotation[1] + (90 * Math.PI /180))/10;
-        cameraPosition[2] += Math.cos(cameraRotation[1] + (90 * Math.PI /180))/10;
-     
-    }
-    
-    if (INPUT.getKeys()[87])//forward
-    {
-        cameraPosition[0] -= Math.sin(cameraRotation[1])/10;
-        cameraPosition[2] += Math.cos(cameraRotation[1])/10;
-     
-    }
-     
-    if (INPUT.getKeys()[83])//backward
-    {
-        cameraPosition[0] += Math.sin(cameraRotation[1])/10;
-        cameraPosition[2] -= Math.cos(cameraRotation[1])/10;
-     
-    }
-     
-    if (INPUT.getKeys()[69])//down
-        cameraPosition[1] -= 1 *cameraDeltaSize;
-        
-    if (INPUT.getKeys()[81])//up
-        cameraPosition[1] += 1 *cameraDeltaSize;
-    
-    //
-    //Create viewmatrix
-    //
-    mat4.identity(GRAPHICS.getViewMatrix());
-    mat4.rotate(GRAPHICS.getViewMatrix(),cameraRotation[0],[1,0,0]);
-    mat4.rotate(GRAPHICS.getViewMatrix(),cameraRotation[1],[0,1,0]);
-    
-    mat4.translate(GRAPHICS.getViewMatrix(),(cameraPosition));
-
-	
-	//test gen cube
-	if (INPUT.getKeys()[49])
-		GAME.testGenCube();
-	
-}
-
 Game.prototype = new GameBase();
 Game.prototype.constructor = Game;
 
-
-
 function Game()
-{    
-	//delete me
-	this.testGenCube = function()
-	{
-		var gameObject = new GameObject();
-		{
-			gameObject.setName("CubeTest");    
-			gameObject.getMesh().draw = drawTest;
-			gameObject.getMesh().setShader(GRAPHICS.getShader("Opaque"));
-			gameObject.getMesh().setMainTexture(GRAPHICS.getTextures()[1]);
-			gameObject.getTransform().setPosition([0,20,0]);
-			gameObject.getTransform().setScale([1,1,1]);
-			//Init rb
-			gameObject.getRigidbody().setMass(0.5);
-			gameObject.getRigidbody().setShape(new CANNON.Box(new CANNON.Vec3(0,0,0)));
-			
-			gameObject.getRigidbody().init();
-			
-			gameObject.getRigidbody().getBody().quaternion.setFromAxisAngle(new CANNON.Vec3(0,1,0), 45);
-			
-		}
-		
-		this.m_RootGameObject.getChildren().push(gameObject);
-		
-	}
-
+{     
     //***************
     // Game interface
     //***************
@@ -267,16 +193,8 @@ function Game()
             gameObject.getMesh().setMainTexture(GRAPHICS.getTextures()[0]);
             gameObject.getTransform().setPosition([0,0,-10]);
             
-            var aComponent = new Component();
-            aComponent.update = cameraControllerUpdate;
-            
-            
-            gameObject.getBehaviors().push(aComponent);
-        
-        
-        
         }
-        this.m_RootGameObject.getChildren().push(gameObject);
+        this.m_RootGameObject.addChild(gameObject);
         
         //Init test object 3
         var test3 = new GameObject();
@@ -287,7 +205,7 @@ function Game()
             test3.getTransform().setPosition([10,10,10]);
         
         }
-        this.m_RootGameObject.getChildren().push(test3);
+        this.m_RootGameObject.addChild(test3);
         
         //Init test object 2
         var whatIsJavaScript = new GameObject();
@@ -304,7 +222,7 @@ function Game()
 			whatIsJavaScript.getRigidbody().init();
         
         }
-        this.m_RootGameObject.getChildren().push(whatIsJavaScript);
+        this.m_RootGameObject.addChild(whatIsJavaScript);
         
         //Init test object 2
         var whatIsJavaScript2 = new GameObject();
@@ -321,10 +239,54 @@ function Game()
 			whatIsJavaScript2.getRigidbody().init();
         
         }
-        this.m_RootGameObject.getChildren().push(whatIsJavaScript2);
+        this.m_RootGameObject.addChild(whatIsJavaScript2);
 		
-        this.m_RootGameObject.getChildren().push(PREFABS.rotatorTest());
-        this.m_RootGameObject.getChildren().push(PREFABS.groundObject());
+        this.m_RootGameObject.addChild(PREFABS.rotatorTest());
+        this.m_RootGameObject.addChild(PREFABS.groundObject());
+        
+        //make camera
+        var someCamera = new GameObject();
+        {
+            someCamera.setName("TheTestCamera");    
+            someCamera.getTransform().setPosition([0,0,0]);
+            someCamera.getTransform().setScale([1,1,1]);
+            
+            //Add camera
+            var camera = new Camera(someCamera);
+            camera.draw = cameraDrawTest;
+            someCamera.getBehaviors().push(camera);
+            //Add camera controller
+            someCamera.getBehaviors().push(new CameraController(someCamera));
+
+        }
+        this.m_RootGameObject.addChild(someCamera);
+        
+        //make hudcamera
+        var hudCamera = new GameObject();
+        {
+            hudCamera.getTransform().setPosition([0,-1000,0]);
+        
+            //Add camera
+            var camera = new Camera(hudCamera);
+            camera.draw = cameraOverlayDrawTest;
+            camera.createOrthographicCamera();
+            hudCamera.getBehaviors().push(camera);
+            
+        }
+        this.m_RootGameObject.addChild(hudCamera);
+        
+        //Make hud element
+        var gameObject123 = new GameObject();
+        {
+            gameObject123.setName("Huddude");    
+            gameObject123.getMesh().draw = drawTest;
+            gameObject123.getMesh().setVertexBuffer(GRAPHICS.getQuadVertexArray());
+            gameObject123.getMesh().setMainTexture(GRAPHICS.getTextures()[0]);
+            gameObject123.getTransform().setPosition([1,1000 +1,-5]);
+            
+        }
+        this.m_RootGameObject.addChild(gameObject123);
+        
                 
     };
 

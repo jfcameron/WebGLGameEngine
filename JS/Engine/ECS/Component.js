@@ -10,9 +10,11 @@
 // Description: Initial implementation.
 // Author: Joseph Cameron
 //
-function Component()
+function Component(aGameObject)
 {
-    var m_GameObject = null;
+    var m_GameObject = aGameObject;
+    
+    this.getGameObject = function(){return m_GameObject;};
     
     this.update = function(){};
     
