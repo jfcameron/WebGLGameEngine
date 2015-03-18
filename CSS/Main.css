@@ -44,7 +44,10 @@ body
 {
     /* Background */
     background-image: url("../textures/BG.png");
-    background-color: #8888CC;
+    background-color: #101A1A;
+    background-size: 40% 120%;
+    background-position: center top;
+    background-repeat:repeat-x; 
     
     /* Font */
     font-family: 	helvetica, arial, sans-serif ;

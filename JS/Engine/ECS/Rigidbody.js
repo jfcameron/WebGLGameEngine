@@ -68,8 +68,10 @@ function Rigidbody(aOwnerGameObject)
 		//Update transform rotation
 		var rotationBuffer = new CANNON.Vec3();
 		m_Body.quaternion.toEuler(rotationBuffer,"YZX");
-		var xyzBuffer = [rotationBuffer.z,rotationBuffer.x,rotationBuffer.y];
+		var xyzBuffer = [rotationBuffer.z * 57.295779513,rotationBuffer.y * 57.295779513,rotationBuffer.x *57.295779513];
 		m_GameObject.getTransform().setRotation(xyzBuffer);
+        
+        //console.log(rotationBuffer);
 		
 		//if (m_GameObject.getName() == "CubeTest")
 		//	console.log(rotationBuffer);

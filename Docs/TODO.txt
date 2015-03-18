@@ -1,9 +1,7 @@
 ----------------
 Short term
 ---------------
-Decouple primary camera from Graphics.js
-    Add activeCamera reference in graphics,
-    Write camera component: sets up viewport info, view, perspective mats.
+children gameobjects should inherit parent rotation, position
 
 Refactor hardcoded light dir, color, replace with uniforms. Add ambient light, add specular lighting.
 
@@ -37,6 +35,10 @@ Create VBOs for basic shapes: circle, sphere, pyramid.
 ---------
 DONE
 ---------
+Decouple primary camera from Graphics.js
+    Add activeCamera reference in graphics,
+    Write camera component: sets up viewport info, view, perspective mats.
+
 Incorporate a physics engine
 Camera controls in demo scene
 Added normal to vertex attributes
