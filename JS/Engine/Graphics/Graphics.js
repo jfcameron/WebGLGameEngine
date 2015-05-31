@@ -45,6 +45,7 @@ function Graphics()
     var textures            = []; //List of handles to textures
     var VertexArrays        = []; //List of user defined vertex data
     
+    
     //Special VBOs TODO: consider moving to vertexarrays
     var QuadVertexArray     = null; //Reference to the VBO containing Quad vertex data
     var TriVertexArray      = null; //Reference to the VBO containing Triangle vertex data

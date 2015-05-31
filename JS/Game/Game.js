@@ -13,12 +13,23 @@
 // Author: Joseph Cameron
 //
 
+function shadowCasterCamera()
+{
+    var glContext = GRAPHICS.getContext();
+    
+    glContext.bindFramebuffer(glContext.FRAMEBUFFER, null);
+    glContext.clear( glContext.COLOR_BUFFER_BIT | glContext.DEPTH_BUFFER_BIT );
+    
+};
+
 function cameraDrawTest()
 {
     //
     // Prep context
     //
     var glContext = GRAPHICS.getContext();
+    
+    glContext.bindFramebuffer(glContext.FRAMEBUFFER, null);
     glContext.viewport  (0,0, glContext.viewportWidth/1, glContext.viewportHeight/1);
     glContext.clear     ( glContext.COLOR_BUFFER_BIT | glContext.DEPTH_BUFFER_BIT );
     
@@ -31,6 +42,8 @@ function cameraOverlayDrawTest()
     // Prep context
     //
     var glContext = GRAPHICS.getContext();
+    
+    glContext.bindFramebuffer(glContext.FRAMEBUFFER, null);
     glContext.viewport  (0,0, glContext.viewportWidth/1, glContext.viewportHeight/1);
     glContext.clear     ( glContext.DEPTH_BUFFER_BIT );
     
