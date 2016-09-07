@@ -1,7 +1,7 @@
 #WebGLGameEngine
 simple game engine for the web using Javascript and WebGL.
-![alt tag](https://dl.dropboxusercontent.com/u/102655232/Github/Guar3D/Build_Image.png "")
-example game: [Win32 build](https://dl.dropboxusercontent.com/u/102655232/Github/Guar3D/Win32_build.7z) 
+![alt tag](https://dl.dropboxusercontent.com/u/102655232/Github/WebGLGameEngine/Build_Image.png "")
+example game: [live demo](http://jfcameron.github.io/Articles/WebGLGameEngine/content.html) 
 
 ### Features:
 * Entity component system
