@@ -16,7 +16,7 @@ online demo viewable here: [live demo](http://jfcameron.github.io/Articles/WebGL
 * [glMatrix.js](http://glmatrix.net/) - Mat4x4 & Vector operations.
 * [Cannon.js](http://www.cannonjs.org/) - 3D rigidbody physics
 
-123123123```diff
+```diff
 + this will be highlighted in green
 - this will be highlighted in red
 ```
