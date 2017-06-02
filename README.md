@@ -1,19 +1,22 @@
 # WebGLGameEngine
-simple game engine for the web using Javascript and WebGL.
+![alt tag](http://jfcameron.github.io/Github/WebGLGameEngine/Build_Image.png "")
 
-![alt tag](https://dl.dropboxusercontent.com/u/102655232/Github/WebGLGameEngine/Build_Image.png "")
-example game: [live demo](http://jfcameron.github.io/Articles/WebGLGameEngine/content.html) 
+## Description
+simple game engine for the web using Javascript and WebGL.
 
 ### Features:
 * Entity component system
 * 3D rigidbody physics simulation
 * 3D forward graphics renderer
 
+### Demo
+online demo viewable here: [live demo](http://jfcameron.github.io/Articles/WebGLGameEngine/content.html) 
+
 ### Libraries used
-Math
-* [glMatrix.js](http://glmatrix.net/)
+* [glMatrix.js](http://glmatrix.net/) - Mat4x4 & Vector operations.
+* [Cannon.js](http://www.cannonjs.org/) - 3D rigidbody physics
 
-Physics
-* [Cannon.js](http://www.cannonjs.org/)
-
-library licenses can be found in /Docs.
+123123123```diff
++ this will be highlighted in green
+- this will be highlighted in red
+```
