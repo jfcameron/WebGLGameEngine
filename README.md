@@ -2,6 +2,9 @@
 ![alt tag](http://jfcameron.github.io/Github/WebGLGameEngine/Build_Image.png "")
 
 ## Description
+![asdf](https://img.shields.io/badge/development%20status-closed-lightgrey.svg)
+![asdf](https://img.shields.io/badge/platforms-web-lightgrey.svg)
+
 simple game engine for the web using Javascript and WebGL.
 
 ## Features:
